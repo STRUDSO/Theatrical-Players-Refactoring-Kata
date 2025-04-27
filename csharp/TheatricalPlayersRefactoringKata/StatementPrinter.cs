@@ -18,21 +18,19 @@ namespace TheatricalPlayersRefactoringKata
                     Usd(amounFor), perf.Audience);
             }
 
-            var totalAmount = TotalAmount(invoice, plays);
-
-            result += String.Format("Amount owed is {0}\n", Usd(totalAmount));
+            result += String.Format("Amount owed is {0}\n", Usd(TotalAmount(invoice, plays)));
             result += String.Format("You earned {0} credits\n", TotalVolumeCredits(invoice, plays));
             return result;
         }
 
         private static int TotalAmount(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var totalAmount = 0;
+            var result = 0;
             foreach (var perf in invoice.Performances) {
-                totalAmount += AmounFor(perf, plays);
+                result += AmounFor(perf, plays);
             }
 
-            return totalAmount;
+            return result;
         }
 
         private static int TotalVolumeCredits(Invoice invoice, Dictionary<string, Play> plays)
