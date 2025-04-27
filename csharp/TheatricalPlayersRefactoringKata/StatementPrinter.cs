@@ -10,6 +10,9 @@ namespace TheatricalPlayersRefactoringKata
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
             var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance => Enrich(plays, performance)).ToList());
+
+            statementData.TotalAmount = TotalAmount(statementData.Performances);
+            statementData.TotalVolumenCredits = TotalVolumeCredits((statementData.Performances));
             return renderPlainText(statementData);
         }
 
@@ -63,8 +66,8 @@ namespace TheatricalPlayersRefactoringKata
                 result += $"  {perf.Play.Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
-            result += $"Amount owed is {Usd(TotalAmount(statementData.Performances))}\n";
-            result += $"You earned {TotalVolumeCredits(statementData.Performances)} credits\n";
+            result += $"Amount owed is {Usd(statementData.TotalAmount)}\n";
+            result += $"You earned {statementData.TotalVolumenCredits} credits\n";
             return result;
         }
 
@@ -106,5 +109,9 @@ namespace TheatricalPlayersRefactoringKata
         }
     }
 
-    public record StatementData(string Customer, List<Performance> Performances);
+    public record StatementData(string Customer, List<Performance> Performances)
+    {
+        public int TotalAmount { get; set; }
+        public int TotalVolumenCredits { get; set; }
+    }
 }
