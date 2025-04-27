@@ -90,12 +90,7 @@ public record StatementData(string Customer, List<Performance> Performances)
     }
 }
 
-internal class PerformanceCalculator
+internal class PerformanceCalculator(Performance performance, Play play)
 {
-    public PerformanceCalculator(Performance performance, Play play)
-    {
-        Play = play;
-    }
-
-    public Play Play { get; set; }
+    public Play Play { get; set; } = play;
 }
