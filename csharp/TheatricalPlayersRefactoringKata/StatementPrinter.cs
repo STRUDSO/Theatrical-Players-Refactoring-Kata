@@ -9,47 +9,43 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance =>
-            {
-                var play = plays[performance.PlayID];
-                return EnrichPerformances(performance, play);
-            }).ToList());
+            var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance => Enrich(plays, performance)).ToList());
             return renderPlainText(statementData);
         }
 
-        private Performance EnrichPerformances(Performance arg, Play playFor)
+        private Performance Enrich(Dictionary<string, Play> plays, Performance performance)
         {
-            var arg_ = arg with { Play = playFor };
-            return arg_ with{ Amoumt = AmoumtFor(arg_) };
+            var result = performance with { Play = plays[performance.PlayID] };
+            return result with { Amoumt = AmoumtFor(result) };
         }
 
-        private int AmoumtFor(Performance arg_)
+        private int AmoumtFor(Performance performance)
         {
-            var thisAmount = 0;
-            switch (arg_.Play.Type)
+            var result = 0;
+            switch (performance.Play.Type)
             {
                 case "tragedy":
-                    thisAmount = 40000;
-                    if (arg_.Audience > 30)
+                    result = 40000;
+                    if (performance.Audience > 30)
                     {
-                        thisAmount += 1000 * (arg_.Audience - 30);
+                        result += 1000 * (performance.Audience - 30);
                     }
 
                     break;
                 case "comedy":
-                    thisAmount = 30000;
-                    if (arg_.Audience > 20)
+                    result = 30000;
+                    if (performance.Audience > 20)
                     {
-                        thisAmount += 10000 + 500 * (arg_.Audience - 20);
+                        result += 10000 + 500 * (performance.Audience - 20);
                     }
 
-                    thisAmount += 300 * arg_.Audience;
+                    result += 300 * performance.Audience;
                     break;
                 default:
-                    throw new Exception("unknown type: " + arg_.Play.Type);
+                    throw new Exception("unknown type: " + performance.Play.Type);
             }
 
-            return thisAmount;
+            return result;
         }
 
         private static string renderPlainText(StatementData statementData)
