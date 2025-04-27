@@ -19,7 +19,8 @@ namespace TheatricalPlayersRefactoringKata
 
         private Performance EnrichPerformances(Performance arg, Play playFor)
         {
-            return arg with { Play = playFor };
+            var arg_ = arg with { Play = playFor };
+            return arg_ with{ Amoumt = AmounFor(arg_) };
         }
 
         private static string renderPlainText(StatementData statementData)
