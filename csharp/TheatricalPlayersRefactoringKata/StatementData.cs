@@ -67,20 +67,15 @@ internal class PerformanceCalculator(Performance performance, Play play)
 
     public Play Play { get; set; } = play;
 
-    public int AmountFor()
+    public virtual int AmountFor()
     {
         var result = 0;
         var performancePlay = Play;
         switch (performancePlay.Type)
         {
             case "tragedy":
-                result = 40000;
-                if (performance.Audience > 30)
-                {
-                    result += 1000 * (performance.Audience - 30);
-                }
 
-                break;
+                throw new NotImplementedException();
             case "comedy":
                 result = 30000;
                 if (performance.Audience > 20)
@@ -109,4 +104,16 @@ internal class PerformanceCalculator(Performance performance, Play play)
 
 internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play);
 
-internal class TragedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play);
+internal class TragedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
+{
+    public override int AmountFor()
+    {
+        var result = 40000;
+        if (performance.Audience > 30)
+        {
+            result += 1000 * (performance.Audience - 30);
+        }
+
+        return result;
+    }
+}
