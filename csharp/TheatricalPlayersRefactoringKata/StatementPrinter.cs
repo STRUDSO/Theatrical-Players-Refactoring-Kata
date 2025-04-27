@@ -9,7 +9,27 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            return RenderPlainText(StatementData.CreateStatementData(invoice, plays));
+            return RenderPlainText(StatementData.For(invoice, plays));
+        }
+
+        public static string PrintHtml(Invoice invoice, Dictionary<string, Play> plays)
+        {
+            return RenderHtml(StatementData.For(invoice, plays));
+        }
+
+        private static string RenderHtml(StatementData data)
+        {
+            var result = $"<h1>Statement for {data.Customer}</h1>\n";
+            result += "<table>\n";
+            result += "<tr><th>play</th><th>seats</th><th>cost</th></tr>";
+            foreach (var perf in data.Performances) {
+                result += $" <tr><td>{perf.Play.Name}</td><td>{perf.Audience}</td>";
+                result += $" <td>{Usd(perf.Amoumt)}</td></tr>\n";
+            }
+            result += "</table>\n";
+            result += $"<p>Amount owed is <em>{Usd(data.TotalAmount)}</em></p>\n";
+            result += $"<p>You earned <em>{data.TotalVolumenCredits}</em> credits</p>\n";
+            return result;
         }
 
         private static string RenderPlainText(StatementData statementData)

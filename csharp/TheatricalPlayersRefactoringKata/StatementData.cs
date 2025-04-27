@@ -9,12 +9,12 @@ public record StatementData(string Customer, List<Performance> Performances)
     public int TotalAmount { get; set; }
     public int TotalVolumenCredits { get; set; }
 
-    public static StatementData CreateStatementData(Invoice invoice, Dictionary<string, Play> plays)
+    public static StatementData For(Invoice invoice, Dictionary<string, Play> plays)
     {
         var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance => Enrich(plays, performance)).ToList());
 
         statementData.TotalAmount = TotalAmountFor(statementData.Performances);
-        statementData.TotalVolumenCredits = TotalVolumeCredits((statementData.Performances));
+        statementData.TotalVolumenCredits = TotalVolumeCreditsFor((statementData.Performances));
         return statementData;
     }
 
@@ -67,7 +67,7 @@ public record StatementData(string Customer, List<Performance> Performances)
         return result;
     }
 
-    private static int TotalVolumeCredits(List<Performance> invoicePerformances)
+    public static int TotalVolumeCreditsFor(List<Performance> invoicePerformances)
     {
         var result = 0;
         foreach (var perf in invoicePerformances)

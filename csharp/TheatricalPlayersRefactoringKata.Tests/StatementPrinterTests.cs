@@ -11,6 +11,27 @@ namespace TheatricalPlayersRefactoringKata.Tests
         [Fact]
         public Task test_statement_example()
         {
+            var (plays, invoice) = TestData();
+
+            StatementPrinter statementPrinter = new StatementPrinter();
+            var result = statementPrinter.Print(invoice, plays);
+
+            return Verifier.Verify(result);
+        }
+
+        [Fact]
+        public void test_statement_example_html()
+        {
+            // var (plays, invoice) = TestData();
+            //
+            // StatementPrinter statementPrinter = new StatementPrinter();
+            // var result = statementPrinter.PrintHtml(invoice, plays);
+            //
+            // return Verifier.Verify(result);
+        }
+
+        private static (Dictionary<string, Play> plays, Invoice invoice) TestData()
+        {
             var plays = new Dictionary<string, Play>();
             plays.Add("hamlet", new Play("Hamlet", "tragedy"));
             plays.Add("as-like", new Play("As You Like It", "comedy"));
@@ -19,12 +40,9 @@ namespace TheatricalPlayersRefactoringKata.Tests
             Invoice invoice = new Invoice("BigCo", new List<Performance>{new Performance("hamlet", 55),
                 new Performance("as-like", 35),
                 new Performance("othello", 40)});
-            
-            StatementPrinter statementPrinter = new StatementPrinter();
-            var result = statementPrinter.Print(invoice, plays);
-
-            return Verifier.Verify(result);
+            return (plays, invoice);
         }
+
         [Fact]
         public void test_statement_with_new_play_types()
         {
