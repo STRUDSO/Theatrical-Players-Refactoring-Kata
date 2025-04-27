@@ -56,7 +56,13 @@ internal class PerformanceCalculator(Performance performance, Play play)
 {
     public static PerformanceCalculator Create(Performance performance, Play play)
     {
-        return new PerformanceCalculator(performance, play);
+        switch (play.Type)
+        {
+            case "tragedy":
+            case "comedy":
+            default:
+                return new PerformanceCalculator(performance, play);
+        }
     }
 
     public Play Play { get; set; } = play;
