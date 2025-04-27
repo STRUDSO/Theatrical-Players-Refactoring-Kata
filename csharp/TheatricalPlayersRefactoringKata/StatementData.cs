@@ -24,12 +24,12 @@ public record StatementData(string Customer, List<Performance> Performances)
         var result = performance with { Play = calculator.Play };
         return result with
         {
-            Amoumt = AmoumtFor(result),
+            Amoumt = AmountFor(result),
             VolumeCredits = VolumeCredits(result)
         };
     }
 
-    private static int AmoumtFor(Performance performance)
+    private static int AmountFor(Performance performance)
     {
         var result = 0;
         switch (performance.Play.Type)
