@@ -8,18 +8,17 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var result = string.Format("Statement for {0}\n", invoice.Customer);
+            var result = $"Statement for {invoice.Customer}\n";
 
             foreach (var perf in invoice.Performances)
             {
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
-                result += String.Format("  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name,
-                    Usd(amounFor), perf.Audience);
+                result += $"  {PlayFor(plays, perf).Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
-            result += String.Format("Amount owed is {0}\n", Usd(TotalAmount(invoice, plays)));
-            result += String.Format("You earned {0} credits\n", TotalVolumeCredits(invoice, plays));
+            result += $"Amount owed is {Usd(TotalAmount(invoice, plays))}\n";
+            result += $"You earned {TotalVolumeCredits(invoice, plays)} credits\n";
             return result;
         }
 
