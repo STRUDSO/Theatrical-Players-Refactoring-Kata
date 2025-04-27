@@ -13,3 +13,9 @@ open Coverage/index.html
 dotnet tool restore
 dotnet stryker -o
 ```
+
+https://medium.com/@tom-010/tcr-variants-test-commit-revert-bf6bd84b17d3
+```TCR
+dotnet build && ( dotnet test && git commit -am "r" || git reset --hard)
+
+```
