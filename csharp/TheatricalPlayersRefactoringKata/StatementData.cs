@@ -6,15 +6,13 @@ namespace TheatricalPlayersRefactoringKata;
 
 public record StatementData(string Customer, List<Performance> Performances)
 {
-    public int TotalAmount { get; set; }
-    public int TotalVolumenCredits { get; set; }
+    public int TotalAmount { get; } = TotalAmountFor(Performances);
+    public int TotalVolumenCredits { get; } = TotalVolumeCreditsFor(Performances);
 
     public static StatementData For(Invoice invoice, Dictionary<string, Play> plays)
     {
-        var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance => Enrich(plays, performance)).ToList());
-
-        statementData.TotalAmount = TotalAmountFor(statementData.Performances);
-        statementData.TotalVolumenCredits = TotalVolumeCreditsFor((statementData.Performances));
+        var performances = invoice.Performances.Select(performance => Enrich(plays, performance)).ToList();
+        var statementData = new StatementData(invoice.Customer, performances);
         return statementData;
     }
 
@@ -53,19 +51,14 @@ internal class PerformanceCalculator(Performance performance, Play play)
         }
     }
 
-    public Play Play { get; set; } = play;
+    public Play Play { get; } = play;
 
     public virtual int AmountFor()
     {
-        throw new Exception("unknown type: " + Play.Type);
+        throw new("unknown type: " + Play.Type);
     }
 
-    public virtual int VolumeCredits()
-    {
-        int result = 0;
-        result += Math.Max(performance.Audience - 30, 0);
-        return result;
-    }
+    public virtual int VolumeCredits() => Math.Max(performance.Audience - 30, 0);
 }
 
 internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
