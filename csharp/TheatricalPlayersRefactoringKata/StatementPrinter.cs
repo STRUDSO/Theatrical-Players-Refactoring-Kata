@@ -12,7 +12,7 @@ namespace TheatricalPlayersRefactoringKata
             return RenderPlainText(StatementData.For(invoice, plays));
         }
 
-        public static string PrintHtml(Invoice invoice, Dictionary<string, Play> plays)
+        public string PrintHtml(Invoice invoice, Dictionary<string, Play> plays)
         {
             return RenderHtml(StatementData.For(invoice, plays));
         }

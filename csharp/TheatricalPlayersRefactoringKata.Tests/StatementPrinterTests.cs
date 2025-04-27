@@ -20,14 +20,14 @@ namespace TheatricalPlayersRefactoringKata.Tests
         }
 
         [Fact]
-        public void test_statement_example_html()
+        public Task test_statement_example_html()
         {
-            // var (plays, invoice) = TestData();
-            //
-            // StatementPrinter statementPrinter = new StatementPrinter();
-            // var result = statementPrinter.PrintHtml(invoice, plays);
-            //
-            // return Verifier.Verify(result);
+            var (plays, invoice) = TestData();
+
+            StatementPrinter statementPrinter = new StatementPrinter();
+            var result = statementPrinter.PrintHtml(invoice, plays);
+
+            return Verifier.Verify(result);
         }
 
         private static (Dictionary<string, Play> plays, Invoice invoice) TestData()
