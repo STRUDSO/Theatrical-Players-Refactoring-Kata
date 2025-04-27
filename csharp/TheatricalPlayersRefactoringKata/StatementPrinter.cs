@@ -18,12 +18,16 @@ namespace TheatricalPlayersRefactoringKata
                 // add volume credits
                 volumeCredits += VolumeCredits(plays, perf);
             }
-            foreach (var perf in invoice.Performances) {
-            // print line for this order
+
+            foreach (var perf in invoice.Performances)
+            {
+                // print line for this order
                 var amounFor = AmounFor(perf, plays);
-                result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name, Usd(amounFor), perf.Audience);
+                result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name,
+                    Usd(amounFor), perf.Audience);
                 totalAmount += AmounFor(perf, plays);
             }
+
             result += String.Format(cultureInfo, "Amount owed is {0}\n", Usd(totalAmount));
             result += String.Format("You earned {0} credits\n", volumeCredits);
             return result;
@@ -57,15 +61,19 @@ namespace TheatricalPlayersRefactoringKata
             {
                 case "tragedy":
                     thisAmount = 40000;
-                    if (perf.Audience > 30) {
+                    if (perf.Audience > 30)
+                    {
                         thisAmount += 1000 * (perf.Audience - 30);
                     }
+
                     break;
                 case "comedy":
                     thisAmount = 30000;
-                    if (perf.Audience > 20) {
+                    if (perf.Audience > 20)
+                    {
                         thisAmount += 10000 + 500 * (perf.Audience - 20);
                     }
+
                     thisAmount += 300 * perf.Audience;
                     break;
                 default:
