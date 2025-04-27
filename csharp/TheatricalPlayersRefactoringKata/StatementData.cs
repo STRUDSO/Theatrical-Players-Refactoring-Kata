@@ -70,32 +70,36 @@ internal class PerformanceCalculator(Performance performance, Play play)
 
 internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
 {
+    private readonly Performance _performance = performance;
+
     public override int AmountFor()
     {
        var result = 30000;
-        if (performance.Audience > 20)
+        if (_performance.Audience > 20)
         {
-            result += 10000 + 500 * (performance.Audience - 20);
+            result += 10000 + 500 * (_performance.Audience - 20);
         }
 
-        result += 300 * performance.Audience;
+        result += 300 * _performance.Audience;
         return result;
     }
 
     public override int VolumeCredits()
     {
-        return base.VolumeCredits() + (int)Math.Floor((decimal)performance.Audience / 5);
+        return base.VolumeCredits() + (int)Math.Floor((decimal)_performance.Audience / 5);
     }
 }
 
 internal class TragedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
 {
+    private readonly Performance _performance = performance;
+
     public override int AmountFor()
     {
         var result = 40000;
-        if (performance.Audience > 30)
+        if (_performance.Audience > 30)
         {
-            result += 1000 * (performance.Audience - 30);
+            result += 1000 * (_performance.Audience - 30);
         }
 
         return result;
