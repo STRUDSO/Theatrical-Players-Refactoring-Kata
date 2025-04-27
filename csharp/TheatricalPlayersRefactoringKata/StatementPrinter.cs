@@ -30,7 +30,7 @@ namespace TheatricalPlayersRefactoringKata
             {
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
-                result += $"  {PlayFor(plays, perf).Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
+                result += $"  {PlayFor(perf).Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
             result += $"Amount owed is {Usd(TotalAmount(plays, statementData.Performances))}\n";
@@ -71,20 +71,19 @@ namespace TheatricalPlayersRefactoringKata
             int result = 0;
             result += Math.Max(perf.Audience - 30, 0);
             // add extra credit for every ten comedy attendees
-            if ("comedy" == PlayFor(plays, perf).Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
+            if ("comedy" == PlayFor(perf).Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
             return result;
         }
 
-        private static Play PlayFor(Dictionary<string, Play> plays, Performance perf)
+        private static Play PlayFor(Performance perf)
         {
-            var play = plays[perf.PlayID];
-            return play;
+            return perf.Play;
         }
 
         private static int AmounFor(Performance perf, Dictionary<string, Play> plays)
         {
             var thisAmount = 0;
-            switch (PlayFor(plays, perf).Type)
+            switch (PlayFor(perf).Type)
             {
                 case "tragedy":
                     thisAmount = 40000;
@@ -104,7 +103,7 @@ namespace TheatricalPlayersRefactoringKata
                     thisAmount += 300 * perf.Audience;
                     break;
                 default:
-                    throw new Exception("unknown type: " + PlayFor(plays, perf).Type);
+                    throw new Exception("unknown type: " + PlayFor(perf).Type);
             }
 
             return thisAmount;
