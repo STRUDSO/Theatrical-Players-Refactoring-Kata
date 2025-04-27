@@ -20,6 +20,7 @@ public record StatementData(string Customer, List<Performance> Performances)
 
     private static Performance Enrich(Dictionary<string, Play> plays, Performance performance)
     {
+        var calculator = new PerformanceCalculator(performance);
         var result = performance with { Play = plays[performance.PlayID] };
         return result with
         {
@@ -86,5 +87,12 @@ public record StatementData(string Customer, List<Performance> Performances)
         // add extra credit for every ten comedy attendees
         if ("comedy" == perf.Play.Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
         return result;
+    }
+}
+
+internal class PerformanceCalculator
+{
+    public PerformanceCalculator(Performance performance)
+    {
     }
 }
