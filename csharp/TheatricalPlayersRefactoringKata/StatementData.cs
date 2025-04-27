@@ -69,27 +69,8 @@ internal class PerformanceCalculator(Performance performance, Play play)
 
     public virtual int AmountFor()
     {
-        var result = 0;
         var performancePlay = Play;
-        switch (performancePlay.Type)
-        {
-            case "tragedy":
-
-                throw new NotImplementedException();
-            case "comedy":
-                result = 30000;
-                if (performance.Audience > 20)
-                {
-                    result += 10000 + 500 * (performance.Audience - 20);
-                }
-
-                result += 300 * performance.Audience;
-                break;
-            default:
-                throw new Exception("unknown type: " + performancePlay.Type);
-        }
-
-        return result;
+        throw new Exception("unknown type: " + performancePlay.Type);
     }
 
     public int VolumeCredits()
