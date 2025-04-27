@@ -24,38 +24,9 @@ public record StatementData(string Customer, List<Performance> Performances)
         var result = performance with { Play = calculator.Play };
         return result with
         {
-            Amoumt = AmountFor(result),
+            Amoumt = PerformanceCalculator.AmountFor(result),
             VolumeCredits = VolumeCredits(result)
         };
-    }
-
-    private static int AmountFor(Performance performance)
-    {
-        var result = 0;
-        switch (performance.Play.Type)
-        {
-            case "tragedy":
-                result = 40000;
-                if (performance.Audience > 30)
-                {
-                    result += 1000 * (performance.Audience - 30);
-                }
-
-                break;
-            case "comedy":
-                result = 30000;
-                if (performance.Audience > 20)
-                {
-                    result += 10000 + 500 * (performance.Audience - 20);
-                }
-
-                result += 300 * performance.Audience;
-                break;
-            default:
-                throw new Exception("unknown type: " + performance.Play.Type);
-        }
-
-        return result;
     }
 
     private static int TotalAmountFor(List<Performance> invoicePerformances)
@@ -93,4 +64,33 @@ public record StatementData(string Customer, List<Performance> Performances)
 internal class PerformanceCalculator(Performance performance, Play play)
 {
     public Play Play { get; set; } = play;
+
+    public static int AmountFor(Performance performance)
+    {
+        var result = 0;
+        switch (performance.Play.Type)
+        {
+            case "tragedy":
+                result = 40000;
+                if (performance.Audience > 30)
+                {
+                    result += 1000 * (performance.Audience - 30);
+                }
+
+                break;
+            case "comedy":
+                result = 30000;
+                if (performance.Audience > 20)
+                {
+                    result += 10000 + 500 * (performance.Audience - 20);
+                }
+
+                result += 300 * performance.Audience;
+                break;
+            default:
+                throw new Exception("unknown type: " + performance.Play.Type);
+        }
+
+        return result;
+    }
 }
