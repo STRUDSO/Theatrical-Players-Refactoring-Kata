@@ -58,8 +58,8 @@ internal class PerformanceCalculator(Performance performance, Play play)
     {
         switch (play.Type)
         {
-            case "tragedy":
-            case "comedy":
+            case "tragedy": return new TragedyCalculator(performance, play);
+            case "comedy": return new ComedyCalculator(performance, play);
             default:
                 return new PerformanceCalculator(performance, play);
         }
@@ -106,3 +106,7 @@ internal class PerformanceCalculator(Performance performance, Play play)
         return result;
     }
 }
+
+internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play);
+
+internal class TragedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play);
