@@ -12,9 +12,9 @@ namespace TheatricalPlayersRefactoringKata
             return renderPlainText(statementData, invoice, plays);
         }
 
-        private static string renderPlainText(object statementData, Invoice invoice, Dictionary<string, Play> plays)
+        private static string renderPlainText(StatementData statementData, Invoice invoice, Dictionary<string, Play> plays)
         {
-            var result = $"Statement for {invoice.Customer}\n";
+            var result = $"Statement for {statementData.Customer}\n";
 
             foreach (var perf in invoice.Performances)
             {
