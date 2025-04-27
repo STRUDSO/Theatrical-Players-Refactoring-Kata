@@ -20,36 +20,36 @@ namespace TheatricalPlayersRefactoringKata
         private Performance EnrichPerformances(Performance arg, Play playFor)
         {
             var arg_ = arg with { Play = playFor };
-            return arg_ with{ Amoumt = Amoumt() };
+            return arg_ with{ Amoumt = AmoumtFor(arg_) };
+        }
 
-            int Amoumt()
+        private int AmoumtFor(Performance arg_)
+        {
+            var thisAmount = 0;
+            switch (arg_.Play.Type)
             {
-                var thisAmount = 0;
-                switch (arg_.Play.Type)
-                {
-                    case "tragedy":
-                        thisAmount = 40000;
-                        if (arg_.Audience > 30)
-                        {
-                            thisAmount += 1000 * (arg_.Audience - 30);
-                        }
+                case "tragedy":
+                    thisAmount = 40000;
+                    if (arg_.Audience > 30)
+                    {
+                        thisAmount += 1000 * (arg_.Audience - 30);
+                    }
 
-                        break;
-                    case "comedy":
-                        thisAmount = 30000;
-                        if (arg_.Audience > 20)
-                        {
-                            thisAmount += 10000 + 500 * (arg_.Audience - 20);
-                        }
+                    break;
+                case "comedy":
+                    thisAmount = 30000;
+                    if (arg_.Audience > 20)
+                    {
+                        thisAmount += 10000 + 500 * (arg_.Audience - 20);
+                    }
 
-                        thisAmount += 300 * arg_.Audience;
-                        break;
-                    default:
-                        throw new Exception("unknown type: " + arg_.Play.Type);
-                }
-
-                return thisAmount;
+                    thisAmount += 300 * arg_.Audience;
+                    break;
+                default:
+                    throw new Exception("unknown type: " + arg_.Play.Type);
             }
+
+            return thisAmount;
         }
 
         private static string renderPlainText(StatementData statementData)
