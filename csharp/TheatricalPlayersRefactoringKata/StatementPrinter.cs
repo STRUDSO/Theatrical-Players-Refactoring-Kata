@@ -19,7 +19,7 @@ namespace TheatricalPlayersRefactoringKata
 
         private Performance EnrichPerformances(Performance arg, Play playFor)
         {
-            return arg;
+            return arg with { Play = playFor };
         }
 
         private static string renderPlainText(StatementData statementData, Dictionary<string, Play> plays)
