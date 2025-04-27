@@ -102,7 +102,20 @@ internal class PerformanceCalculator(Performance performance, Play play)
     }
 }
 
-internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play);
+internal class ComedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
+{
+    public override int AmountFor()
+    {
+       var result = 30000;
+        if (performance.Audience > 20)
+        {
+            result += 10000 + 500 * (performance.Audience - 20);
+        }
+
+        result += 300 * performance.Audience;
+        return result;
+    }
+}
 
 internal class TragedyCalculator(Performance performance, Play play) : PerformanceCalculator(performance, play)
 {
