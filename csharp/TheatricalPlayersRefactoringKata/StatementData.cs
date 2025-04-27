@@ -25,7 +25,7 @@ public record StatementData(string Customer, List<Performance> Performances)
         return result with
         {
             Amoumt = calculator.AmountFor(),
-            VolumeCredits = VolumeCredits(result)
+            VolumeCredits = calculator.VolumeCredits()
         };
     }
 
@@ -48,15 +48,6 @@ public record StatementData(string Customer, List<Performance> Performances)
             result += perf.VolumeCredits;
         }
 
-        return result;
-    }
-
-    private static int VolumeCredits(Performance perf)
-    {
-        int result = 0;
-        result += Math.Max(perf.Audience - 30, 0);
-        // add extra credit for every ten comedy attendees
-        if ("comedy" == perf.Play.Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
         return result;
     }
 }
@@ -92,6 +83,15 @@ internal class PerformanceCalculator(Performance performance, Play play)
                 throw new Exception("unknown type: " + performancePlay.Type);
         }
 
+        return result;
+    }
+
+    public int VolumeCredits()
+    {
+        int result = 0;
+        result += Math.Max(performance.Audience - 30, 0);
+        // add extra credit for every ten comedy attendees
+        if ("comedy" == Play.Type) result += (int)Math.Floor((decimal)performance.Audience / 5);
         return result;
     }
 }
