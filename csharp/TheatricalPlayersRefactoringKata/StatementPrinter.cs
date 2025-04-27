@@ -15,7 +15,7 @@ namespace TheatricalPlayersRefactoringKata
 
             foreach(var perf in invoice.Performances) 
             {
-                var thisAmount = AmounFor(perf, PlayFor(plays, perf));
+                var thisAmount = AmounFor(perf, plays);
                 // add volume credits
                 volumeCredits += Math.Max(perf.Audience - 30, 0);
                 // add extra credit for every ten comedy attendees
@@ -36,10 +36,10 @@ namespace TheatricalPlayersRefactoringKata
             return play;
         }
 
-        private static int AmounFor(Performance perf, Play play)
+        private static int AmounFor(Performance perf, Dictionary<string, Play> plays)
         {
             var thisAmount = 0;
-            switch (play.Type)
+            switch (PlayFor(plays, perf).Type)
             {
                 case "tragedy":
                     thisAmount = 40000;
@@ -55,7 +55,7 @@ namespace TheatricalPlayersRefactoringKata
                     thisAmount += 300 * perf.Audience;
                     break;
                 default:
-                    throw new Exception("unknown type: " + play.Type);
+                    throw new Exception("unknown type: " + PlayFor(plays, perf).Type);
             }
 
             return thisAmount;
