@@ -9,10 +9,10 @@ namespace TheatricalPlayersRefactoringKata
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
             var statementData = new StatementData(invoice.Customer, invoice.Performances);
-            return renderPlainText(statementData, invoice, plays);
+            return renderPlainText(statementData, plays);
         }
 
-        private static string renderPlainText(StatementData statementData, Invoice invoice, Dictionary<string, Play> plays)
+        private static string renderPlainText(StatementData statementData, Dictionary<string, Play> plays)
         {
             var result = $"Statement for {statementData.Customer}\n";
 
@@ -23,25 +23,25 @@ namespace TheatricalPlayersRefactoringKata
                 result += $"  {PlayFor(plays, perf).Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
-            result += $"Amount owed is {Usd(TotalAmount(invoice, plays))}\n";
-            result += $"You earned {TotalVolumeCredits(invoice, plays)} credits\n";
+            result += $"Amount owed is {Usd(TotalAmount(plays, statementData.Performances))}\n";
+            result += $"You earned {TotalVolumeCredits(plays, statementData.Performances)} credits\n";
             return result;
         }
 
-        private static int TotalAmount(Invoice invoice, Dictionary<string, Play> plays)
+        private static int TotalAmount(Dictionary<string, Play> plays, List<Performance> invoicePerformances)
         {
             var result = 0;
-            foreach (var perf in invoice.Performances) {
+            foreach (var perf in invoicePerformances) {
                 result += AmounFor(perf, plays);
             }
 
             return result;
         }
 
-        private static int TotalVolumeCredits(Invoice invoice, Dictionary<string, Play> plays)
+        private static int TotalVolumeCredits(Dictionary<string, Play> plays, List<Performance> invoicePerformances)
         {
             var result = 0;
-            foreach (var perf in invoice.Performances)
+            foreach (var perf in invoicePerformances)
             {
                 // add volume credits
                 result += VolumeCredits(plays, perf);
