@@ -9,7 +9,6 @@ namespace TheatricalPlayersRefactoringKata
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
             var totalAmount = 0;
-            var volumeCredits = 0;
             var result = string.Format("Statement for {0}\n", invoice.Customer);
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
@@ -22,15 +21,23 @@ namespace TheatricalPlayersRefactoringKata
                 totalAmount += AmounFor(perf, plays);
             }
 
+            var volumeCredits = TotalVolumeCredits(invoice, plays);
+
+            result += String.Format(cultureInfo, "Amount owed is {0}\n", Usd(totalAmount));
+            result += String.Format("You earned {0} credits\n", volumeCredits);
+            return result;
+        }
+
+        private static int TotalVolumeCredits(Invoice invoice, Dictionary<string, Play> plays)
+        {
+            var volumeCredits = 0;
             foreach (var perf in invoice.Performances)
             {
                 // add volume credits
                 volumeCredits += VolumeCredits(plays, perf);
             }
 
-            result += String.Format(cultureInfo, "Amount owed is {0}\n", Usd(totalAmount));
-            result += String.Format("You earned {0} credits\n", volumeCredits);
-            return result;
+            return volumeCredits;
         }
 
         private static string Usd(int amounFor)
