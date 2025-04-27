@@ -20,7 +20,36 @@ namespace TheatricalPlayersRefactoringKata
         private Performance EnrichPerformances(Performance arg, Play playFor)
         {
             var arg_ = arg with { Play = playFor };
-            return arg_ with{ Amoumt = AmounFor(arg_) };
+            return arg_ with{ Amoumt = Amoumt() };
+
+            int Amoumt()
+            {
+                var thisAmount = 0;
+                switch (arg_.Play.Type)
+                {
+                    case "tragedy":
+                        thisAmount = 40000;
+                        if (arg_.Audience > 30)
+                        {
+                            thisAmount += 1000 * (arg_.Audience - 30);
+                        }
+
+                        break;
+                    case "comedy":
+                        thisAmount = 30000;
+                        if (arg_.Audience > 20)
+                        {
+                            thisAmount += 10000 + 500 * (arg_.Audience - 20);
+                        }
+
+                        thisAmount += 300 * arg_.Audience;
+                        break;
+                    default:
+                        throw new Exception("unknown type: " + arg_.Play.Type);
+                }
+
+                return thisAmount;
+            }
         }
 
         private static string renderPlainText(StatementData statementData)
@@ -78,31 +107,7 @@ namespace TheatricalPlayersRefactoringKata
 
         private static int AmounFor(Performance perf)
         {
-            var thisAmount = 0;
-            switch (perf.Play.Type)
-            {
-                case "tragedy":
-                    thisAmount = 40000;
-                    if (perf.Audience > 30)
-                    {
-                        thisAmount += 1000 * (perf.Audience - 30);
-                    }
-
-                    break;
-                case "comedy":
-                    thisAmount = 30000;
-                    if (perf.Audience > 20)
-                    {
-                        thisAmount += 10000 + 500 * (perf.Audience - 20);
-                    }
-
-                    thisAmount += 300 * perf.Audience;
-                    break;
-                default:
-                    throw new Exception("unknown type: " + perf.Play.Type);
-            }
-
-            return thisAmount;
+            return perf.Amoumt;
         }
     }
 
