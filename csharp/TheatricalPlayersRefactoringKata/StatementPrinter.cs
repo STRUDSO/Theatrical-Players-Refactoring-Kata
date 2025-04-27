@@ -20,17 +20,18 @@ namespace TheatricalPlayersRefactoringKata
 
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
-                result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", PlayFor(plays, perf).Name, format(amounFor), perf.Audience);
+                result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name, format(amounFor), perf.Audience);
                 totalAmount += AmounFor(perf, plays);
             }
-            result += String.Format(cultureInfo, "Amount owed is {0:C}\n", format(totalAmount));
+            result += String.Format(cultureInfo, "Amount owed is {0}\n", format(totalAmount));
             result += String.Format("You earned {0} credits\n", volumeCredits);
             return result;
         }
 
-        private static decimal format(int amounFor)
+        private static string format(int amounFor)
         {
-            return Convert.ToDecimal(amounFor / 100);
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+            return Convert.ToDecimal(amounFor / 100).ToString("C", cultureInfo);
         }
 
         private static int VolumeCredits(Dictionary<string, Play> plays, Performance perf)
