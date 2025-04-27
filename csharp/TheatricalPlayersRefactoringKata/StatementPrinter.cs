@@ -9,11 +9,15 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(EnrichPerformances).ToList());
+            var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(performance =>
+            {
+                var play = plays[performance.PlayID];
+                return EnrichPerformances(performance, play);
+            }).ToList());
             return renderPlainText(statementData, plays);
         }
 
-        private Performance EnrichPerformances(Performance arg)
+        private Performance EnrichPerformances(Performance arg, Play playFor)
         {
             return arg;
         }
