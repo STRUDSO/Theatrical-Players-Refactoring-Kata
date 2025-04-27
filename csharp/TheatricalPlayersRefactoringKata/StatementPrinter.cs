@@ -8,7 +8,7 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var statementData = new StatementData(invoice.Customer);
+            var statementData = new StatementData(invoice.Customer, invoice.Performances);
             return renderPlainText(statementData, invoice, plays);
         }
 
@@ -16,7 +16,7 @@ namespace TheatricalPlayersRefactoringKata
         {
             var result = $"Statement for {statementData.Customer}\n";
 
-            foreach (var perf in invoice.Performances)
+            foreach (var perf in statementData.Performances)
             {
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
@@ -101,5 +101,5 @@ namespace TheatricalPlayersRefactoringKata
         }
     }
 
-    public record StatementData(string Customer);
+    public record StatementData(string Customer, List<Performance> Performances);
 }
