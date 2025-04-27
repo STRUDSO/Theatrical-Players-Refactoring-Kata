@@ -8,6 +8,11 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
+            return renderPlainText(invoice, plays);
+        }
+
+        private static string renderPlainText(Invoice invoice, Dictionary<string, Play> plays)
+        {
             var result = $"Statement for {invoice.Customer}\n";
 
             foreach (var perf in invoice.Performances)
