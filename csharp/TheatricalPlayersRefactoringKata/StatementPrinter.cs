@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace TheatricalPlayersRefactoringKata
 {
@@ -8,8 +9,13 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var statementData = new StatementData(invoice.Customer, invoice.Performances);
+            var statementData = new StatementData(invoice.Customer, invoice.Performances.Select(EnrichPerformances).ToList());
             return renderPlainText(statementData, plays);
+        }
+
+        private Performance EnrichPerformances(Performance arg)
+        {
+            return arg;
         }
 
         private static string renderPlainText(StatementData statementData, Dictionary<string, Play> plays)
