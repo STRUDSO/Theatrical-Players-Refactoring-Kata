@@ -84,7 +84,7 @@ namespace TheatricalPlayersRefactoringKata
             foreach (var perf in invoicePerformances)
             {
                 // add volume credits
-                result += VolumeCredits(perf);
+                result += perf.VolumeCredits;
             }
 
             return result;
