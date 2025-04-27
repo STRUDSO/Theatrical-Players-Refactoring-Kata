@@ -15,17 +15,17 @@ namespace TheatricalPlayersRefactoringKata
 
             foreach (var perf in invoice.Performances)
             {
-                // add volume credits
-                volumeCredits += VolumeCredits(plays, perf);
-            }
-
-            foreach (var perf in invoice.Performances)
-            {
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
                 result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name,
                     Usd(amounFor), perf.Audience);
                 totalAmount += AmounFor(perf, plays);
+            }
+
+            foreach (var perf in invoice.Performances)
+            {
+                // add volume credits
+                volumeCredits += VolumeCredits(plays, perf);
             }
 
             result += String.Format(cultureInfo, "Amount owed is {0}\n", Usd(totalAmount));
