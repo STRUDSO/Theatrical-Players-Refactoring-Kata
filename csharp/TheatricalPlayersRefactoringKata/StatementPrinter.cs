@@ -24,7 +24,7 @@ namespace TheatricalPlayersRefactoringKata
             result += "<tr><th>play</th><th>seats</th><th>cost</th></tr>";
             foreach (var perf in data.Performances) {
                 result += $" <tr><td>{perf.Play.Name}</td><td>{perf.Audience}</td>";
-                result += $" <td>{Usd(perf.Amoumt)}</td></tr>\n";
+                result += $" <td>{Usd(perf.Amount)}</td></tr>\n";
             }
             result += "</table>\n";
             result += $"<p>Amount owed is <em>{Usd(data.TotalAmount)}</em></p>\n";
@@ -39,7 +39,7 @@ namespace TheatricalPlayersRefactoringKata
             foreach (var perf in statementData.Performances)
             {
                 // print line for this order
-                var amounFor = perf.Amoumt;
+                var amounFor = perf.Amount;
                 result += $"  {perf.Play.Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 

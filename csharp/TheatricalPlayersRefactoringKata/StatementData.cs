@@ -6,35 +6,23 @@ namespace TheatricalPlayersRefactoringKata;
 
 public record StatementData(string Customer, List<PerformanceData> Performances)
 {
-    public int TotalAmount { get; } = Performances.Sum(perf => perf.Amoumt);
-    public int TotalVolumenCredits { get; } = Performances.Sum(perf => perf.VolumeCredits);
+    public int TotalAmount { get; } = Performances.Sum(perf => perf.Amount);
+    public int TotalVolumenCredits { get; } = Performances.Sum(perf => perf.VolumenCredits);
 
     public static StatementData For(Invoice invoice, Dictionary<string, Play> plays)
     {
         var performances = invoice.Performances.Select(performance =>
         {
             var calculator = PerformanceCalculator.Create(performance, plays[performance.PlayID]);
-            return new PerformanceData(performance.PlayID, performance.Audience) with
-            {
-                Play = calculator.Play,
-                Amoumt = calculator.AmountFor(),
-                VolumeCredits = calculator.VolumeCredits()
-            };
+            var data = new PerformanceData(performance.Audience, calculator.Play, calculator.AmountFor(),
+                calculator.VolumeCredits());
+            return data;
         }).ToList();
         return new StatementData(invoice.Customer, performances);
     }
 }
 
-public record PerformanceData: Performance
-{
-    public PerformanceData(string playID, int audience) : base(playID, audience)
-    {
-    }
-
-    public Play Play { get; set; }
-    public int Amoumt { get; set; }
-    public int VolumeCredits { get; set; }
-}
+public record PerformanceData(int Audience, Play Play, int Amount, int VolumenCredits);
 
 internal class PerformanceCalculator(Performance performance, Play play)
 {
