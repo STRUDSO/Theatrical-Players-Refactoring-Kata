@@ -31,24 +31,12 @@ public record StatementData(string Customer, List<Performance> Performances)
 
     private static int TotalAmountFor(List<Performance> invoicePerformances)
     {
-        var result = 0;
-        foreach (var perf in invoicePerformances) {
-            result += perf.Amoumt;
-        }
-
-        return result;
+        return invoicePerformances.Sum(perf => perf.Amoumt);
     }
 
     public static int TotalVolumeCreditsFor(List<Performance> invoicePerformances)
     {
-        var result = 0;
-        foreach (var perf in invoicePerformances)
-        {
-            // add volume credits
-            result += perf.VolumeCredits;
-        }
-
-        return result;
+        return invoicePerformances.Sum(perf => perf.VolumeCredits);
     }
 }
 
@@ -69,8 +57,7 @@ internal class PerformanceCalculator(Performance performance, Play play)
 
     public virtual int AmountFor()
     {
-        var performancePlay = Play;
-        throw new Exception("unknown type: " + performancePlay.Type);
+        throw new Exception("unknown type: " + Play.Type);
     }
 
     public int VolumeCredits()
