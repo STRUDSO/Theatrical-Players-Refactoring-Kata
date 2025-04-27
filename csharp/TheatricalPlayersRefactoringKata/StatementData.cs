@@ -24,7 +24,7 @@ public record StatementData(string Customer, List<Performance> Performances)
         var result = performance with { Play = calculator.Play };
         return result with
         {
-            Amoumt = PerformanceCalculator.AmountFor(result),
+            Amoumt = calculator.AmountFor(),
             VolumeCredits = VolumeCredits(result)
         };
     }
@@ -65,10 +65,11 @@ internal class PerformanceCalculator(Performance performance, Play play)
 {
     public Play Play { get; set; } = play;
 
-    public static int AmountFor(Performance performance)
+    public int AmountFor()
     {
         var result = 0;
-        switch (performance.Play.Type)
+        var performancePlay = Play;
+        switch (performancePlay.Type)
         {
             case "tragedy":
                 result = 40000;
@@ -88,7 +89,7 @@ internal class PerformanceCalculator(Performance performance, Play play)
                 result += 300 * performance.Audience;
                 break;
             default:
-                throw new Exception("unknown type: " + performance.Play.Type);
+                throw new Exception("unknown type: " + performancePlay.Type);
         }
 
         return result;
