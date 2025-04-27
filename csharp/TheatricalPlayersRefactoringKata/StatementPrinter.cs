@@ -14,7 +14,7 @@ namespace TheatricalPlayersRefactoringKata
                 var play = plays[performance.PlayID];
                 return EnrichPerformances(performance, play);
             }).ToList());
-            return renderPlainText(statementData, plays);
+            return renderPlainText(statementData);
         }
 
         private Performance EnrichPerformances(Performance arg, Play playFor)
@@ -22,39 +22,39 @@ namespace TheatricalPlayersRefactoringKata
             return arg with { Play = playFor };
         }
 
-        private static string renderPlainText(StatementData statementData, Dictionary<string, Play> plays)
+        private static string renderPlainText(StatementData statementData)
         {
             var result = $"Statement for {statementData.Customer}\n";
 
             foreach (var perf in statementData.Performances)
             {
                 // print line for this order
-                var amounFor = AmounFor(perf, plays);
-                result += $"  {PlayFor(perf).Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
+                var amounFor = AmounFor(perf);
+                result += $"  {perf.Play.Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
-            result += $"Amount owed is {Usd(TotalAmount(plays, statementData.Performances))}\n";
-            result += $"You earned {TotalVolumeCredits(plays, statementData.Performances)} credits\n";
+            result += $"Amount owed is {Usd(TotalAmount(statementData.Performances))}\n";
+            result += $"You earned {TotalVolumeCredits(statementData.Performances)} credits\n";
             return result;
         }
 
-        private static int TotalAmount(Dictionary<string, Play> plays, List<Performance> invoicePerformances)
+        private static int TotalAmount(List<Performance> invoicePerformances)
         {
             var result = 0;
             foreach (var perf in invoicePerformances) {
-                result += AmounFor(perf, plays);
+                result += AmounFor(perf);
             }
 
             return result;
         }
 
-        private static int TotalVolumeCredits(Dictionary<string, Play> plays, List<Performance> invoicePerformances)
+        private static int TotalVolumeCredits(List<Performance> invoicePerformances)
         {
             var result = 0;
             foreach (var perf in invoicePerformances)
             {
                 // add volume credits
-                result += VolumeCredits(plays, perf);
+                result += VolumeCredits(perf);
             }
 
             return result;
@@ -66,24 +66,19 @@ namespace TheatricalPlayersRefactoringKata
             return Convert.ToDecimal(amounFor / 100).ToString("C", cultureInfo);
         }
 
-        private static int VolumeCredits(Dictionary<string, Play> plays, Performance perf)
+        private static int VolumeCredits(Performance perf)
         {
             int result = 0;
             result += Math.Max(perf.Audience - 30, 0);
             // add extra credit for every ten comedy attendees
-            if ("comedy" == PlayFor(perf).Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
+            if ("comedy" == perf.Play.Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
             return result;
         }
 
-        private static Play PlayFor(Performance perf)
-        {
-            return perf.Play;
-        }
-
-        private static int AmounFor(Performance perf, Dictionary<string, Play> plays)
+        private static int AmounFor(Performance perf)
         {
             var thisAmount = 0;
-            switch (PlayFor(perf).Type)
+            switch (perf.Play.Type)
             {
                 case "tragedy":
                     thisAmount = 40000;
@@ -103,7 +98,7 @@ namespace TheatricalPlayersRefactoringKata
                     thisAmount += 300 * perf.Audience;
                     break;
                 default:
-                    throw new Exception("unknown type: " + PlayFor(perf).Type);
+                    throw new Exception("unknown type: " + perf.Play.Type);
             }
 
             return thisAmount;
