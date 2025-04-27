@@ -13,12 +13,13 @@ namespace TheatricalPlayersRefactoringKata
             var result = string.Format("Statement for {0}\n", invoice.Customer);
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
-            foreach(var perf in invoice.Performances) 
+            foreach (var perf in invoice.Performances)
             {
                 // add volume credits
                 volumeCredits += VolumeCredits(plays, perf);
-
-                // print line for this order
+            }
+            foreach (var perf in invoice.Performances) {
+            // print line for this order
                 var amounFor = AmounFor(perf, plays);
                 result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name, Usd(amounFor), perf.Audience);
                 totalAmount += AmounFor(perf, plays);
