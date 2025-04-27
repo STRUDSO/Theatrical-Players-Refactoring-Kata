@@ -4,38 +4,36 @@ using System.Linq;
 
 namespace TheatricalPlayersRefactoringKata;
 
-public record StatementData(string Customer, List<Performance> Performances)
+public record StatementData(string Customer, List<PerformanceData> Performances)
 {
-    public int TotalAmount { get; } = TotalAmountFor(Performances);
-    public int TotalVolumenCredits { get; } = TotalVolumeCreditsFor(Performances);
+    public int TotalAmount { get; } = Performances.Sum(perf => perf.Amoumt);
+    public int TotalVolumenCredits { get; } = Performances.Sum(perf => perf.VolumeCredits);
 
     public static StatementData For(Invoice invoice, Dictionary<string, Play> plays)
     {
-        var performances = invoice.Performances.Select(performance => Enrich(plays, performance)).ToList();
-        var statementData = new StatementData(invoice.Customer, performances);
-        return statementData;
-    }
-
-    private static Performance Enrich(Dictionary<string, Play> plays, Performance performance)
-    {
-        var calculator = PerformanceCalculator.Create(performance, plays[performance.PlayID]);
-        return performance with
+        var performances = invoice.Performances.Select(performance =>
         {
-            Play = calculator.Play,
-            Amoumt = calculator.AmountFor(),
-            VolumeCredits = calculator.VolumeCredits()
-        };
+            var calculator = PerformanceCalculator.Create(performance, plays[performance.PlayID]);
+            return new PerformanceData(performance.PlayID, performance.Audience) with
+            {
+                Play = calculator.Play,
+                Amoumt = calculator.AmountFor(),
+                VolumeCredits = calculator.VolumeCredits()
+            };
+        }).ToList();
+        return new StatementData(invoice.Customer, performances);
+    }
+}
+
+public record PerformanceData: Performance
+{
+    public PerformanceData(string playID, int audience) : base(playID, audience)
+    {
     }
 
-    private static int TotalAmountFor(List<Performance> invoicePerformances)
-    {
-        return invoicePerformances.Sum(perf => perf.Amoumt);
-    }
-
-    public static int TotalVolumeCreditsFor(List<Performance> invoicePerformances)
-    {
-        return invoicePerformances.Sum(perf => perf.VolumeCredits);
-    }
+    public Play Play { get; set; }
+    public int Amoumt { get; set; }
+    public int VolumeCredits { get; set; }
 }
 
 internal class PerformanceCalculator(Performance performance, Play play)
