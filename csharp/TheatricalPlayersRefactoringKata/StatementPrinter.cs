@@ -59,7 +59,7 @@ namespace TheatricalPlayersRefactoringKata
             foreach (var perf in statementData.Performances)
             {
                 // print line for this order
-                var amounFor = AmounFor(perf);
+                var amounFor = perf.Amoumt;
                 result += $"  {perf.Play.Name}: {Usd(amounFor)} ({perf.Audience} seats)\n";
             }
 
@@ -72,7 +72,7 @@ namespace TheatricalPlayersRefactoringKata
         {
             var result = 0;
             foreach (var perf in invoicePerformances) {
-                result += AmounFor(perf);
+                result += perf.Amoumt;
             }
 
             return result;
@@ -103,11 +103,6 @@ namespace TheatricalPlayersRefactoringKata
             // add extra credit for every ten comedy attendees
             if ("comedy" == perf.Play.Type) result += (int)Math.Floor((decimal)perf.Audience / 5);
             return result;
-        }
-
-        private static int AmounFor(Performance perf)
-        {
-            return perf.Amoumt;
         }
     }
 
