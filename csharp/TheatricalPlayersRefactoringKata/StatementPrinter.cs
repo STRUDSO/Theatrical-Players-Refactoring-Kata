@@ -8,10 +8,11 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            return renderPlainText(invoice, plays);
+            var statementData = new StatementData(invoice.Customer);
+            return renderPlainText(statementData, invoice, plays);
         }
 
-        private static string renderPlainText(Invoice invoice, Dictionary<string, Play> plays)
+        private static string renderPlainText(object statementData, Invoice invoice, Dictionary<string, Play> plays)
         {
             var result = $"Statement for {invoice.Customer}\n";
 
@@ -99,4 +100,6 @@ namespace TheatricalPlayersRefactoringKata
             return thisAmount;
         }
     }
+
+    public record StatementData(string Customer);
 }
