@@ -20,8 +20,8 @@ public record StatementData(string Customer, List<Performance> Performances)
 
     private static Performance Enrich(Dictionary<string, Play> plays, Performance performance)
     {
-        var calculator = new PerformanceCalculator(performance);
-        var result = performance with { Play = plays[performance.PlayID] };
+        var calculator = new PerformanceCalculator(performance, plays[performance.PlayID]);
+        var result = performance with { Play = calculator.Play };
         return result with
         {
             Amoumt = AmoumtFor(result),
@@ -92,7 +92,10 @@ public record StatementData(string Customer, List<Performance> Performances)
 
 internal class PerformanceCalculator
 {
-    public PerformanceCalculator(Performance performance)
+    public PerformanceCalculator(Performance performance, Play play)
     {
+        Play = play;
     }
+
+    public Play Play { get; set; }
 }
