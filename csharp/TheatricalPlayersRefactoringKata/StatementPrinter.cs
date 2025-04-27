@@ -8,34 +8,43 @@ namespace TheatricalPlayersRefactoringKata
     {
         public string Print(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var totalAmount = 0;
             var result = string.Format("Statement for {0}\n", invoice.Customer);
-            CultureInfo cultureInfo = new CultureInfo("en-US");
 
             foreach (var perf in invoice.Performances)
             {
                 // print line for this order
                 var amounFor = AmounFor(perf, plays);
-                result += String.Format(cultureInfo, "  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name,
+                result += String.Format("  {0}: {1} ({2} seats)\n", PlayFor(plays, perf).Name,
                     Usd(amounFor), perf.Audience);
-                totalAmount += AmounFor(perf, plays);
             }
 
-            result += String.Format(cultureInfo, "Amount owed is {0}\n", Usd(totalAmount));
+            var totalAmount = TotalAmount(invoice, plays);
+
+            result += String.Format("Amount owed is {0}\n", Usd(totalAmount));
             result += String.Format("You earned {0} credits\n", TotalVolumeCredits(invoice, plays));
             return result;
         }
 
+        private static int TotalAmount(Invoice invoice, Dictionary<string, Play> plays)
+        {
+            var totalAmount = 0;
+            foreach (var perf in invoice.Performances) {
+                totalAmount += AmounFor(perf, plays);
+            }
+
+            return totalAmount;
+        }
+
         private static int TotalVolumeCredits(Invoice invoice, Dictionary<string, Play> plays)
         {
-            var volumeCredits = 0;
+            var result = 0;
             foreach (var perf in invoice.Performances)
             {
                 // add volume credits
-                volumeCredits += VolumeCredits(plays, perf);
+                result += VolumeCredits(plays, perf);
             }
 
-            return volumeCredits;
+            return result;
         }
 
         private static string Usd(int amounFor)
