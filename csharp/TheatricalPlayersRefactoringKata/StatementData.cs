@@ -60,12 +60,10 @@ internal class PerformanceCalculator(Performance performance, Play play)
         throw new Exception("unknown type: " + Play.Type);
     }
 
-    public int VolumeCredits()
+    public virtual int VolumeCredits()
     {
         int result = 0;
         result += Math.Max(performance.Audience - 30, 0);
-        // add extra credit for every ten comedy attendees
-        if ("comedy" == Play.Type) result += (int)Math.Floor((decimal)performance.Audience / 5);
         return result;
     }
 }
@@ -82,6 +80,11 @@ internal class ComedyCalculator(Performance performance, Play play) : Performanc
 
         result += 300 * performance.Audience;
         return result;
+    }
+
+    public override int VolumeCredits()
+    {
+        return base.VolumeCredits() + (int)Math.Floor((decimal)performance.Audience / 5);
     }
 }
 
