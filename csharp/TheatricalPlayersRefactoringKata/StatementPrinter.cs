@@ -16,7 +16,11 @@ namespace TheatricalPlayersRefactoringKata
         private Performance Enrich(Dictionary<string, Play> plays, Performance performance)
         {
             var result = performance with { Play = plays[performance.PlayID] };
-            return result with { Amoumt = AmoumtFor(result) };
+            return result with
+            {
+                Amoumt = AmoumtFor(result),
+                VolumeCredits = VolumeCredits(result)
+            };
         }
 
         private int AmoumtFor(Performance performance)

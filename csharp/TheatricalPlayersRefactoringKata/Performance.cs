@@ -9,6 +9,7 @@ namespace TheatricalPlayersRefactoringKata
         public int Audience { get => _audience; set => _audience = value; }
         public Play Play { get; set; }
         public int Amoumt { get; set; }
+        public int VolumeCredits { get; set; }
 
         public Performance(string playID, int audience)
         {
